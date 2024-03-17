@@ -1,6 +1,6 @@
-import {
-  capitalize, reverseString, calculator, getKeyInfo, getCipheredKey
-} from './random';
+const {
+  capitalize, reverseString, calculator, getKeyInfo, getCipheredKey, cipher, analyzeArray,
+} = require('./random');
 
 describe('my random', () => {
   let calc;
@@ -47,7 +47,7 @@ describe('my random', () => {
 
   test('caracter info', () => {
     expect(getKeyInfo('n')).toEqual([{
-      number: 110,
+      lower: 110,
       isCapital: false,
       isNoChange: false,
       theLetter: 'n',
@@ -56,7 +56,7 @@ describe('my random', () => {
 
   test('caracter info', () => {
     expect(getKeyInfo('N')).toEqual([{
-      number: 78,
+      lower: 110,
       isCapital: true,
       isNoChange: false,
       theLetter: 'N',
@@ -65,7 +65,7 @@ describe('my random', () => {
 
   test('caracter info', () => {
     expect(getKeyInfo('!')).toEqual([{
-      number: 33,
+      lower: 33,
       isCapital: false,
       isNoChange: true,
       theLetter: '!',
@@ -75,27 +75,28 @@ describe('my random', () => {
   test('caracter info', () => {
     expect(getKeyInfo('nAti!')).toEqual([
       {
-        number: 110, isCapital: false, isNoChange: false, theLetter: 'n',
+        lower: 110, isCapital: false, isNoChange: false, theLetter: 'n',
       },
       {
-        number: 65, isCapital: true, isNoChange: false, theLetter: 'A',
+        lower: 97, isCapital: true, isNoChange: false, theLetter: 'A',
       },
       {
-        number: 116, isCapital: false, isNoChange: false, theLetter: 't',
+        lower: 116, isCapital: false, isNoChange: false, theLetter: 't',
       },
       {
-        number: 105, isCapital: false, isNoChange: false, theLetter: 'i',
+        lower: 105, isCapital: false, isNoChange: false, theLetter: 'i',
       },
       {
-        number: 33, isCapital: false, isNoChange: true, theLetter: '!',
+        lower: 33, isCapital: false, isNoChange: true, theLetter: '!',
       },
     ]);
   });
 
   test('ciphered', () => {
-    expect(getCipheredKey(getKeyInfo('nAti!')).toEqual([
+    const keyInfo = getKeyInfo('nAti!');
+    expect(getCipheredKey(keyInfo)).toEqual([
       {
-        number: 115,theLetter: 'n',
+        number: 115, theLetter: 'n',
       },
       {
         number: 70, theLetter: 'A',
@@ -104,22 +105,38 @@ describe('my random', () => {
         number: 121, theLetter: 't',
       },
       {
-        number: 110,theLetter: 'i',
+        number: 110, theLetter: 'i',
       },
       {
-        number: 38, theLetter: '!',
+        number: 33, theLetter: '!',
       },
-    ]))
-  })
+    ]);
+  });
+});
 
-  // test('cipher', () => {
-  //   expect(cipher('Nati!')).toEqual('Sftn!');
-  // });
-  //   test('cipher nati gives sfyn', () => {
-  //     expect(cipher('nati')).toBe('sfyn');
-  //   });
+test('cipher', () => {
+  expect(cipher('Nati!')).toEqual('Sfyn!');
+});
 
-//   test('cipher nati gives sfyn', () => {
-//     expect(cipher('zzzz')).toBe('eeee');
-//   });
+test('cipher', () => {
+  expect(cipher('MyCat!')).toEqual('RdHfy!');
+});
+
+test('cipher', () => {
+  expect(cipher('MyCat! Nati!')).toEqual('RdHfy! Sfyn!');
+});
+
+test('cipher', () => {
+  expect(cipher('ZyzY!')).toEqual('EdeD!');
+});
+
+test('analyzeArray', () => {
+  expect(analyzeArray([1,8,3,4,2,6])).toEqual(
+    {
+      average: 4,
+      min: 1,
+      max: 8,
+      length: 6,
+    }
+  );
 });
